@@ -34,8 +34,11 @@ Your words here.
 
 It shows up at `/writing/my-post/` with its reading time, and ends with an invitation to reply by email.
 
+## Publishing
+
+Every push to `main` builds the site and publishes it to https://joeray.net via GitHub Pages (`.github/workflows/deploy.yml`). You can also run it by hand from the Actions tab. In the repo's Settings → Pages, **Source** must be set to **GitHub Actions**.
+
 ## Before launch
 
-- Set `site` in `astro.config.mjs` to your real domain.
 - Set `email` in `src/site.config.ts`.
 - Replace the placeholder copy on the Home and Now pages, and the sample post.

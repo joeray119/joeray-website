@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import PostList from '../components/PostList.astro';
+import { getPosts } from '../lib/writing';
+
+const recent = (await getPosts()).slice(0, 4);
+---
+
+<Base>
+  <section class="threshold column">
+    <div class="welcome">
+      <p class="label">Stay a while.</p>
+      <h1>Hello, I'm Joe.</h1>
+      <p class="lede">
+        This is a quiet corner of the internet — a place for notes, works in progress, and the
+        occasional longer piece of writing. There's nothing to sign up for and nothing to scroll
+        past. Pull up a chair.
+      </p>
+    </div>
+  </section>
+
+  <section class="column desk" aria-labelledby="desk-heading">
+    <h2 id="desk-heading" class="label" data-reveal>More from the desk</h2>
+    {recent.length > 0 ? <PostList posts={recent} /> : <p class="soft">Nothing here yet. Soon.</p>}
+    <p class="more" data-reveal>
+      <a href="/writing/">All writing</a>
+      <span class="soft" aria-hidden="true">&nbsp;·&nbsp;</span>
+      <a href="/now/">What I'm working on</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  /* Weighted bottom-left: the words settle low, the top-right stays open like sky. */
+  .threshold {
+    min-height: clamp(26rem, 68vh, 44rem);
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: clamp(3rem, 8vw, 6rem);
+  }
+
+  .welcome h1 {
+    margin: 0.75rem 0 1.5rem;
+  }
+
+  .welcome .lede {
+    max-width: 34em;
+    margin: 0;
+  }
+
+  .desk {
+    margin-top: clamp(2rem, 6vw, 4rem);
+  }
+
+  .desk h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .more {
+    margin-top: 2rem;
+  }
+</style>

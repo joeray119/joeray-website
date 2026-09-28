@@ -1,0 +1,51 @@
+<button class="theme-toggle label" type="button" aria-live="polite">
+  <span class="visually-hidden">Switch to </span><span data-next>forest</span>
+</button>
+
+<style>
+  .theme-toggle {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+  .theme-toggle:hover {
+    color: var(--ink);
+  }
+  .theme-toggle [data-next]::before {
+    content: '';
+    display: inline-block;
+    width: 0.55em;
+    height: 0.55em;
+    margin-right: 0.6em;
+    border: 1px solid var(--wood);
+    border-radius: 50%;
+    vertical-align: 0.05em;
+  }
+</style>
+
+<script>
+  const root = document.documentElement;
+  const dark = window.matchMedia('(prefers-color-scheme: dark)');
+  const current = () => (root.dataset.theme ?? (dark.matches ? 'forest' : 'fog')) as 'fog' | 'forest';
+
+  document.querySelectorAll<HTMLButtonElement>('.theme-toggle').forEach((button) => {
+    const label = button.querySelector('[data-next]')!;
+    const render = () => {
+      const next = current() === 'fog' ? 'forest' : 'fog';
+      label.textContent = next;
+      button.title = `Switch to ${next} mode`;
+    };
+    render();
+    dark.addEventListener('change', render);
+    button.addEventListener('click', () => {
+      const next = current() === 'fog' ? 'forest' : 'fog';
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem('theme', next);
+      } catch {}
+      render();
+    });
+  });
+</script>

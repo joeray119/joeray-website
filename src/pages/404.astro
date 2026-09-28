@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Lost in the fog">
+  <section class="column lost">
+    <p class="label">404</p>
+    <h1>Lost in the fog.</h1>
+    <p class="lede soft">This path doesn't lead anywhere. No harm done.</p>
+    <p><a href="/">Back to the clearing</a></p>
+  </section>
+</Base>
+
+<style>
+  .lost {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  h1 {
+    margin: 0.75rem 0 1rem;
+  }
+</style>

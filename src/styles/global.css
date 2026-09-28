@@ -1,0 +1,328 @@
+/* ------------------------------------------------------------
+   The Clearing
+   Fog (light) and forest office (dark). One accent: wood.
+   ------------------------------------------------------------ */
+
+:root {
+  /* Palette */
+  --fog: #eeeae3;
+  --forest: #1e3530;
+  --canopy: #3f3538;
+  --mist: #8a7f7c;
+  --wood: #c9a27a;
+
+  /* Fog mode (default) */
+  --bg: var(--fog);
+  --ink: var(--canopy);
+  --ink-soft: #6e6360; /* mist, deepened just enough to read at small sizes */
+  --rule: color-mix(in srgb, var(--mist) 45%, transparent);
+  --frame: var(--wood);
+  --mat: #f6f3ee;
+  --selection: color-mix(in srgb, var(--wood) 40%, transparent);
+  --grain-opacity: 0.06;
+
+  /* Type */
+  --serif: 'Newsreader Variable', 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --text: clamp(1.1875rem, 1.1rem + 0.25vw, 1.25rem); /* 19px → 20px */
+  --label: 0.75rem;
+  --measure: 65ch;
+
+  /* Space */
+  --gutter: clamp(1.25rem, 5vw, 3rem);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='fog']) {
+    --bg: var(--forest);
+    --ink: var(--fog);
+    --ink-soft: #a89e98;
+    --rule: color-mix(in srgb, var(--wood) 30%, transparent);
+    --mat: #182b27;
+    --grain-opacity: 0.06;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='forest'] {
+  --bg: var(--forest);
+  --ink: var(--fog);
+  --ink-soft: #a89e98;
+  --rule: color-mix(in srgb, var(--wood) 30%, transparent);
+  --mat: #182b27;
+  --grain-opacity: 0.06;
+  color-scheme: dark;
+}
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--text);
+  font-optical-sizing: auto;
+  line-height: 1.7;
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 600ms ease, color 600ms ease;
+}
+
+/* Paper / film grain. Fixed, still, and never in the way of a click. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.45 0 0 0 0 0.4 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+:root[data-theme='forest'] body::before {
+  mix-blend-mode: screen;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='fog']) body::before {
+    mix-blend-mode: screen;
+  }
+}
+
+::selection {
+  background: var(--selection);
+}
+
+main {
+  flex: 1;
+}
+
+/* ---------- Type ---------- */
+
+h1,
+h2,
+h3 {
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(2.25rem, 1.6rem + 3vw, 3.75rem);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 1.3rem + 0.9vw, 1.875rem);
+}
+
+h3 {
+  font-size: 1.25em;
+}
+
+p {
+  margin: 0 0 1.25em;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-color: var(--wood);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color 400ms ease, color 400ms ease;
+}
+
+a:hover {
+  text-decoration-color: currentColor;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 1px solid var(--wood);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+em {
+  font-style: italic;
+}
+
+hr {
+  border: 0;
+  width: 4rem;
+  height: 1px;
+  margin: 3rem 0;
+  background: var(--wood);
+}
+
+/* Small, quiet labels: nav, dates, reading time */
+.label {
+  font-family: var(--mono);
+  font-size: var(--label);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.lede {
+  font-size: 1.15em;
+  color: var(--ink);
+}
+
+.soft {
+  color: var(--ink-soft);
+}
+
+/* ---------- Layout ---------- */
+
+/* The column leans left; the right side is left open on purpose. */
+.column {
+  width: 100%;
+  max-width: calc(var(--measure) + var(--gutter) * 2);
+  padding-inline: var(--gutter);
+  margin-left: clamp(0px, 16vw - 4rem, 18rem);
+}
+
+@media (max-width: 40rem) {
+  .column {
+    margin-left: 0;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: -3rem;
+  z-index: 200;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg);
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ---------- Prose (posts) ---------- */
+
+.prose > * + h2 {
+  margin-top: 2.5em;
+  margin-bottom: 0.6em;
+}
+.prose > * + h3 {
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+}
+
+.prose blockquote {
+  margin: 2em 0;
+  padding-left: 1.25em;
+  border-left: 1px solid var(--wood);
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.25em;
+  margin: 0 0 1.25em;
+}
+.prose li + li {
+  margin-top: 0.4em;
+}
+.prose li::marker {
+  color: var(--ink-soft);
+}
+
+.prose code {
+  font-family: var(--mono);
+  font-size: 0.8em;
+}
+
+.prose pre {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  padding: 1.25rem;
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  background: var(--mat) !important;
+}
+
+/* Images in posts are hung like framed prints. */
+.prose img,
+.print img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.prose p > img,
+.print {
+  margin: 2.5em 0;
+  padding: clamp(0.75rem, 2.5vw, 1.5rem);
+  background: var(--mat);
+  border: 1px solid var(--frame);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--frame) 35%, transparent);
+}
+
+.print figcaption {
+  margin-top: 0.9rem;
+}
+
+/* ---------- Motion ---------- */
+
+/* Only hidden when JS is present to reveal it again. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition: opacity 1400ms ease, transform 1400ms ease;
+}
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

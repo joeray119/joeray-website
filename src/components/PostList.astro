@@ -1,0 +1,71 @@
+---
+import { formatDate, readingTime, type Post } from '../lib/writing';
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+<ol class="posts">
+  {
+    posts.map((post) => (
+      <li data-reveal>
+        <a href={`/writing/${post.id}/`}>
+          <span class="title">{post.data.title}</span>
+          {post.data.description && <span class="desc soft">{post.data.description}</span>}
+        </a>
+        <p class="label">
+          <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+          <span aria-hidden="true"> · </span>
+          {readingTime(post.body)} min read
+        </p>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .posts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    padding-block: 1.75rem;
+    border-top: 1px solid var(--rule);
+  }
+  li:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  a {
+    display: block;
+    text-decoration: none;
+  }
+
+  .title {
+    display: block;
+    font-size: 1.3em;
+    line-height: 1.3;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: text-decoration-color 500ms ease;
+  }
+  a:hover .title {
+    text-decoration-color: var(--wood);
+  }
+
+  .desc {
+    display: block;
+    margin-top: 0.35rem;
+  }
+
+  p {
+    margin: 0.6rem 0 0;
+  }
+</style>

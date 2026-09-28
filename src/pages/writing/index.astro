@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts } from '../../lib/writing';
+
+const posts = await getPosts();
+---
+
+<Base title="Writing" description="Essays and notes, written slowly.">
+  <section class="column page">
+    <header>
+      <p class="label">{posts.length} {posts.length === 1 ? 'piece' : 'pieces'}</p>
+      <h1>Writing</h1>
+      <p class="lede soft">Essays and notes, written slowly. Take your time.</p>
+    </header>
+    {posts.length > 0 ? <PostList posts={posts} /> : <p class="soft">Nothing here yet. Soon.</p>}
+  </section>
+</Base>
+
+<style>
+  .page header {
+    padding-block: clamp(3rem, 10vw, 7rem) clamp(2rem, 5vw, 3rem);
+  }
+  .page h1 {
+    margin: 0.75rem 0 1rem;
+  }
+  .lede {
+    margin: 0;
+  }
+</style>

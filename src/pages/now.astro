@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Update this whenever things shift.
+const updated = new Date('2026-09-28');
+---
+
+<Base title="What I'm Working On" description="What's on the desk right now.">
+  <article class="column page">
+    <header>
+      <p class="label">
+        Updated <time datetime={updated.toISOString().slice(0, 10)}>
+          {updated.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })}
+        </time>
+      </p>
+      <h1>What I'm Working On</h1>
+    </header>
+
+    <div class="prose">
+      <p class="lede">
+        A short, honest note about what has my attention these days. Less a résumé, more a look at
+        the desk.
+      </p>
+
+      <h2 data-reveal>At work</h2>
+      <p data-reveal>A few sentences on the main thing you're building, and why it matters to you.</p>
+
+      <h2 data-reveal>On the side</h2>
+      <p data-reveal>Projects, experiments, or things you're slowly getting better at.</p>
+
+      <h2 data-reveal>Reading &amp; listening</h2>
+      <ul data-reveal>
+        <li>A book on the nightstand</li>
+        <li>An album on repeat</li>
+      </ul>
+
+      <hr />
+      <p class="soft" data-reveal>
+        This is a <a href="https://nownownow.com/about">now page</a>. If you have one too, I'd love
+        to read it.
+      </p>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .page header {
+    padding-block: clamp(3rem, 10vw, 7rem) clamp(2rem, 5vw, 3rem);
+  }
+  .page h1 {
+    margin-top: 0.75rem;
+  }
+</style>

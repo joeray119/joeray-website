@@ -1,0 +1,85 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getPosts, formatDate, readingTime, type Post } from '../../lib/writing';
+import { site } from '../../site.config';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, older: posts[i + 1] },
+  }));
+}
+
+interface Props {
+  post: Post;
+  older?: Post;
+}
+
+const { post, older } = Astro.props;
+const { Content } = await render(post);
+const minutes = readingTime(post.body);
+const replyHref = `mailto:${site.email}?subject=${encodeURIComponent(`Re: ${post.data.title}`)}`;
+---
+
+<Base title={post.data.title} description={post.data.description}>
+  <article class="column post">
+    <header>
+      <p class="label">
+        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+        <span aria-hidden="true"> · </span>
+        {minutes} min read
+      </p>
+      <h1>{post.data.title}</h1>
+      {post.data.description && <p class="lede soft">{post.data.description}</p>}
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <aside class="reply" aria-label="Reply">
+      <hr />
+      <p>
+        If something here stayed with you, I'd love to hear about it.{' '}
+        <a href={replyHref}>Write back by email</a> — I read everything, slowly, and reply when I can.
+      </p>
+    </aside>
+
+    <nav class="after label" aria-label="More writing">
+      {older && <a href={`/writing/${older.id}/`}>Older: {older.data.title}</a>}
+      <a href="/writing/">More from the desk</a>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .post header {
+    padding-block: clamp(3rem, 10vw, 7rem) clamp(2.5rem, 6vw, 4rem);
+  }
+  .post h1 {
+    margin: 0.75rem 0 1rem;
+  }
+  .post .lede {
+    margin: 0;
+  }
+
+  .reply {
+    margin-top: 3rem;
+  }
+
+  .after {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-top: 3rem;
+  }
+  .after a {
+    text-decoration: none;
+  }
+  .after a:hover {
+    color: var(--ink);
+  }
+</style>

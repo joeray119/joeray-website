@@ -12,7 +12,7 @@ npm run build    # static site in dist/
 
 ## Where things live
 
-- `src/site.config.ts`: your name, description, reply-by-email address and nav
+- `src/site.config.ts`: your name, description, and nav
 - `src/pages/index.astro`: Home
 - `src/pages/now.astro`: What I'm Working On
 - `src/content/writing/*.md`: posts (one markdown file each)
@@ -32,7 +32,7 @@ draft: true                             # optional; drafts only show in dev
 Your words here.
 ```
 
-It shows up at `/writing/my-post/` with its reading time, and ends with an invitation to reply by email.
+It shows up at `/writing/my-post/` with its reading time.
 
 ## Publishing
 
@@ -40,5 +40,4 @@ Every push to `main` builds the site and publishes it to https://joeray.net via 
 
 ## Before launch
 
-- Set `email` in `src/site.config.ts`.
 - Replace the placeholder copy on the Home and Now pages, and the sample post.

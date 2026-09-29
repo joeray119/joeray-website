@@ -7,7 +7,7 @@ The site should feel like a retreat from the internet: a quiet, warm room at the
 - **Layout:** generous whitespace; asymmetric compositions weighted bottom-left, open top-right; ~65ch reading width; thin wood-tone frames on images like framed prints.
 - **Type:** literary serif (Newsreader or Source Serif) for headings and body at 19–20px with 1.7 line-height; small quiet sans or mono for labels, dates, and nav.
 - **Texture/motion:** subtle paper/film grain; slow fade-ins on scroll only; respect `prefers-reduced-motion`.
-- **Presence:** no pop-ups, chat widgets, autoplay, or social feeds. Minimal nav (name, Home, What I'm Working On, Writing). Posts show reading time, have no sidebar, and end with an invitation to reply by email.
+- **Presence:** no pop-ups, chat widgets, autoplay, or social feeds. Minimal nav (name, Home, What I'm Working On, Writing). Posts show reading time, have no sidebar, and end with an invitation to reply by email *(intentionally left off for now: the site doesn't mention or offer email)*.
 - **Microcopy tone:** a calm host. "Stay a while." "More from the desk."
 - **Avoid:** gradients, neon, dense card grids, stock photos, sales CTAs in the hero.
 
@@ -21,6 +21,6 @@ The site should feel like a retreat from the internet: a quiet, warm room at the
 | Framed prints | `src/components/Print.astro`, plus any `![]()` image in a post |
 | Grain | `body::before` in `global.css` (inline SVG noise, no image request) |
 | Slow fade-ins | add `data-reveal` to an element. Handled in `src/layouts/Base.astro`. Off under reduced motion. |
-| Reading time and reply-by-email | `src/pages/writing/[...slug].astro` |
+| Reading time and post ending | `src/pages/writing/[...slug].astro` |
 
 **Accessibility note:** mist `#8A7F7C` is only 3.2:1 on fog, which is too faint for small text. It is used as given for rules and decorative lines. Small labels use a slightly deeper mist (`--ink-soft`: `#6E6360` on fog, `#A89E98` on forest) so they pass WCAG AA. Wood is never used for text on fog, where the contrast is 2:1.

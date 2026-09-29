@@ -2,7 +2,6 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { getPosts, formatDate, readingTime, type Post } from '../../lib/writing';
-import { site } from '../../site.config';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -20,7 +19,6 @@ interface Props {
 const { post, older } = Astro.props;
 const { Content } = await render(post);
 const minutes = readingTime(post.body);
-const replyHref = `mailto:${site.email}?subject=${encodeURIComponent(`Re: ${post.data.title}`)}`;
 ---
 
 <Base title={post.data.title} description={post.data.description}>
@@ -39,13 +37,7 @@ const replyHref = `mailto:${site.email}?subject=${encodeURIComponent(`Re: ${post
       <Content />
     </div>
 
-    <aside class="reply" aria-label="Reply">
-      <hr />
-      <p>
-        If something here stayed with you, I'd love to hear about it.{' '}
-        <a href={replyHref}>Write back by email</a> — I read everything, slowly, and reply when I can.
-      </p>
-    </aside>
+    <hr />
 
     <nav class="after label" aria-label="More writing">
       {older && <a href={`/writing/${older.id}/`}>Older: {older.data.title}</a>}
@@ -63,10 +55,6 @@ const replyHref = `mailto:${site.email}?subject=${encodeURIComponent(`Re: ${post
   }
   .post .lede {
     margin: 0;
-  }
-
-  .reply {
-    margin-top: 3rem;
   }
 
   .after {

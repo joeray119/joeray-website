@@ -6,8 +6,8 @@ import Base from '../layouts/Base.astro';
   <section class="column lost">
     <p class="label">404</p>
     <h1>Lost in the fog.</h1>
-    <p class="lede soft">This path doesn't lead anywhere. No harm done.</p>
-    <p><a href="/">Back to the clearing</a></p>
+    <p class="lede">This path doesn't lead anywhere. No harm done.</p>
+    <p><a class="text-link" href="/">Back to the clearing →</a></p>
   </section>
 </Base>
 
@@ -19,6 +19,6 @@ import Base from '../layouts/Base.astro';
     justify-content: flex-end;
   }
   h1 {
-    margin: 0.75rem 0 1rem;
+    margin: var(--space-2) 0 var(--space-3);
   }
 </style>

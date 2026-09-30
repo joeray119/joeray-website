@@ -10,9 +10,11 @@ import { site } from '../site.config';
 interface Props {
   title?: string;
   description?: string;
+  /** Essay pages get the back-to-writing header. */
+  essay?: boolean;
 }
 
-const { title, description = site.description } = Astro.props;
+const { title, description = site.description, essay = false } = Astro.props;
 const pageTitle = title ? `${title} · ${site.name}` : site.name;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -44,7 +46,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body>
     <a class="skip-link label" href="#main">Skip to content</a>
-    <Header />
+    <Header essay={essay} />
     <main id="main">
       <slot />
     </main>

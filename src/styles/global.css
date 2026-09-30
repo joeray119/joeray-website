@@ -1,58 +1,95 @@
 /* ------------------------------------------------------------
    The Clearing
-   Fog (light) and forest office (dark). One accent: wood.
+   Tokens mirror the design system's tokens.json, one custom
+   property per token. Fog (morning) is the default; Forest
+   (evening) is the dark mode. One text accent: `accent`.
+   `wood` is its decorative twin and never carries text in Fog.
    ------------------------------------------------------------ */
 
 :root {
-  /* Palette */
-  --fog: #eeeae3;
-  --forest: #1e3530;
-  --canopy: #3f3538;
-  --mist: #8a7f7c;
+  /* Color: Fog */
+  --surface: #eeeae3;
+  --surface-raised: #f5f2ed;
+  --surface-sunken: #e2dcd3;
+  --ink: #3f3538;
+  --ink-muted: #6b615e;
+  --accent: #7e5a38;
   --wood: #c9a27a;
-
-  /* Fog mode (default) */
-  --bg: var(--fog);
-  --ink: var(--canopy);
-  --ink-soft: #6e6360; /* mist, deepened just enough to read at small sizes */
-  --rule: color-mix(in srgb, var(--mist) 45%, transparent);
-  --frame: var(--wood);
-  --mat: #f6f3ee;
-  --selection: color-mix(in srgb, var(--wood) 40%, transparent);
-  --grain-opacity: 0.06;
+  --frame: #c9a27a;
+  --rule: rgba(63, 53, 56, 0.16);
+  --brand-forest: #1e3530;
+  --tree-far: #c4bcb8;
+  --tree-mid: #958a8c;
+  --tree-near: #4a3f43;
 
   /* Type */
-  --serif: 'Newsreader Variable', 'Source Serif 4', Georgia, 'Times New Roman', serif;
-  --mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
-  --text: clamp(1.1875rem, 1.1rem + 0.25vw, 1.25rem); /* 19px → 20px */
-  --label: 0.75rem;
-  --measure: 65ch;
+  --font-serif: 'Newsreader Variable', 'Newsreader', 'Iowan Old Style', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+
+  --display-xl: clamp(3.5rem, 1.4rem + 8.4vw, 7rem); /* 112px */
+  --display: clamp(2.75rem, 1.6rem + 4.6vw, 4.75rem); /* 76px */
+  --heading-1: clamp(2.5rem, 1.75rem + 3vw, 3.75rem); /* 60px */
+  --heading-2: clamp(1.75rem, 1.4rem + 1.4vw, 2.375rem); /* 38px */
+  --pull-quote: clamp(1.5rem, 1.3rem + 0.8vw, 1.875rem); /* 30px */
+  --lede: clamp(1.375rem, 1.2rem + 0.7vw, 1.625rem); /* 26px */
+  --body: 1.3125rem; /* 21px, never smaller for long-form */
+  --body-sm: 1.1875rem; /* 19px */
+  --label: 0.8125rem; /* 13px */
+  --meta: 0.75rem; /* 12px */
 
   /* Space */
-  --gutter: clamp(1.25rem, 5vw, 3rem);
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-6: 48px;
+  --space-9: 72px;
+  --space-12: 96px;
+  --space-section: clamp(120px, 16vw, 200px);
+
+  /* Layout */
+  --measure: 680px;
+  --gutter: clamp(16px, 7vw, 96px);
+  --frame-width: 14px;
+  --hairline: 1px;
+  --radius-pill: 999px;
+
+  --shadow-print: 0 30px 60px -30px rgba(20, 30, 26, 0.45);
 
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='fog']) {
-    --bg: var(--forest);
-    --ink: var(--fog);
-    --ink-soft: #a89e98;
-    --rule: color-mix(in srgb, var(--wood) 30%, transparent);
-    --mat: #182b27;
-    --grain-opacity: 0.06;
+    --surface: #1e3530;
+    --surface-raised: #243d37;
+    --surface-sunken: #2a433d;
+    --ink: #eeeae3;
+    --ink-muted: #b7bcb1;
+    --accent: #d9b68e;
+    --frame: #b48c63;
+    --rule: rgba(238, 234, 227, 0.16);
+    --brand-forest: #3a5a51;
+    --tree-far: #2b4640;
+    --tree-mid: #1b302b;
+    --tree-near: #132420;
     color-scheme: dark;
   }
 }
 
 :root[data-theme='forest'] {
-  --bg: var(--forest);
-  --ink: var(--fog);
-  --ink-soft: #a89e98;
-  --rule: color-mix(in srgb, var(--wood) 30%, transparent);
-  --mat: #182b27;
-  --grain-opacity: 0.06;
+  --surface: #1e3530;
+  --surface-raised: #243d37;
+  --surface-sunken: #2a433d;
+  --ink: #eeeae3;
+  --ink-muted: #b7bcb1;
+  --accent: #d9b68e;
+  --frame: #b48c63;
+  --rule: rgba(238, 234, 227, 0.16);
+  --brand-forest: #3a5a51;
+  --tree-far: #2b4640;
+  --tree-mid: #1b302b;
+  --tree-near: #132420;
   color-scheme: dark;
 }
 
@@ -74,41 +111,36 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--bg);
+  background: var(--surface);
   color: var(--ink);
-  font-family: var(--serif);
-  font-size: var(--text);
+  font-family: var(--font-serif);
+  font-size: var(--body);
   font-optical-sizing: auto;
-  line-height: 1.7;
+  line-height: 1.8;
   font-kerning: normal;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  transition: background-color 600ms ease, color 600ms ease;
+  /* Light changing in a room. */
+  transition: background-color 900ms ease, color 900ms ease;
 }
 
-/* Paper / film grain. Fixed, still, and never in the way of a click. */
+/* Paper grain: two layered dot patterns at a few percent ink.
+   Fixed, still, and never in the way of a click. */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 100;
   pointer-events: none;
-  opacity: var(--grain-opacity);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.45 0 0 0 0 0.4 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  mix-blend-mode: multiply;
-}
-
-:root[data-theme='forest'] body::before {
-  mix-blend-mode: screen;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='fog']) body::before {
-    mix-blend-mode: screen;
-  }
+  background-image:
+    radial-gradient(color-mix(in srgb, var(--ink) 5%, transparent) 0.6px, transparent 0.9px),
+    radial-gradient(color-mix(in srgb, var(--ink) 3%, transparent) 0.6px, transparent 0.9px);
+  background-size: 3px 3px, 5px 5px;
+  background-position: 0 0, 1px 2px;
 }
 
 ::selection {
-  background: var(--selection);
+  background: color-mix(in srgb, var(--wood) 40%, transparent);
 }
 
 main {
@@ -120,24 +152,27 @@ main {
 h1,
 h2,
 h3 {
-  font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  font-weight: 300;
   text-wrap: balance;
   margin: 0;
 }
 
 h1 {
-  font-size: clamp(2.25rem, 1.6rem + 3vw, 3.75rem);
-  line-height: 1.1;
+  font-size: var(--display);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
 }
 
 h2 {
-  font-size: clamp(1.5rem, 1.3rem + 0.9vw, 1.875rem);
+  font-size: var(--heading-2);
+  line-height: 1.2;
+  font-weight: 400;
 }
 
 h3 {
   font-size: 1.25em;
+  line-height: 1.3;
+  font-weight: 400;
 }
 
 p {
@@ -145,24 +180,24 @@ p {
   text-wrap: pretty;
 }
 
+/* Links in reading text stay in the serif: accent, with a wood hairline. */
 a {
-  color: inherit;
+  color: var(--accent);
   text-decoration-line: underline;
   text-decoration-color: var(--wood);
-  text-decoration-thickness: 1px;
+  text-decoration-thickness: var(--hairline);
   text-underline-offset: 0.22em;
-  transition: text-decoration-color 400ms ease, color 400ms ease;
+  transition: opacity 400ms ease;
 }
 
 a:hover {
-  text-decoration-color: currentColor;
+  opacity: 0.65;
 }
 
 a:focus-visible,
 button:focus-visible {
-  outline: 1px solid var(--wood);
+  outline: var(--hairline) solid var(--accent);
   outline-offset: 4px;
-  border-radius: 2px;
 }
 
 em {
@@ -171,40 +206,116 @@ em {
 
 hr {
   border: 0;
-  width: 4rem;
-  height: 1px;
-  margin: 3rem 0;
+  width: 48px;
+  height: var(--hairline);
+  margin: var(--space-6) 0;
   background: var(--wood);
 }
 
-/* Small, quiet labels: nav, dates, reading time */
+/* Section labels and navigation: mono, uppercase, accent. */
 .label {
-  font-family: var(--mono);
+  font-family: var(--font-mono);
   font-size: var(--label);
   font-weight: 400;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  line-height: 1.6;
-  color: var(--ink-soft);
+  line-height: 1.4;
+  color: var(--accent);
+}
+
+/* Dates, reading time, captions, footer: mono, uppercase, muted. */
+.meta {
+  font-family: var(--font-mono);
+  font-size: var(--meta);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: var(--ink-muted);
 }
 
 .lede {
-  font-size: 1.15em;
-  color: var(--ink);
+  font-size: var(--lede);
+  line-height: 1.55;
+  font-style: italic;
+  color: var(--ink-muted);
 }
 
-.soft {
-  color: var(--ink-soft);
+.muted {
+  color: var(--ink-muted);
+}
+
+/* The system's only call to action: mono, accent, wood underline, arrow. */
+.text-link {
+  display: inline-block;
+  padding-block: 12px;
+  font-family: var(--font-mono);
+  font-size: var(--label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: var(--hairline) solid var(--wood);
+}
+
+/* The mark: a small diamond outlined in wood. */
+.mark {
+  display: inline-block;
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border: 1.5px solid var(--wood);
+  transform: rotate(45deg);
+}
+
+.hair {
+  display: block;
+  width: 48px;
+  height: var(--hairline);
+  background: var(--wood);
 }
 
 /* ---------- Layout ---------- */
 
-/* The column leans left; the right side is left open on purpose. */
+/* One reading column. It leans left; the right side is left open on purpose. */
 .column {
   width: 100%;
   max-width: calc(var(--measure) + var(--gutter) * 2);
   padding-inline: var(--gutter);
   margin-left: clamp(0px, 16vw - 4rem, 18rem);
+}
+
+/* Two-column section: a narrow label column, then the content column. */
+.section {
+  display: grid;
+  grid-template-columns: minmax(0, 360px) minmax(0, var(--measure));
+  gap: var(--space-4) 64px;
+  padding-inline: var(--gutter);
+  margin-top: var(--space-section);
+}
+
+.section-label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: 0.9rem;
+}
+
+.section h2 {
+  font-size: var(--heading-1);
+  line-height: 1.05;
+  font-weight: 300;
+  margin-bottom: var(--space-3);
+}
+
+@media (max-width: 64rem) {
+  .section {
+    grid-template-columns: minmax(0, var(--measure));
+  }
+  .section-label {
+    padding-top: 0;
+  }
 }
 
 @media (max-width: 40rem) {
@@ -228,13 +339,13 @@ hr {
   top: -3rem;
   z-index: 200;
   padding: 0.5rem 0.75rem;
-  background: var(--bg);
+  background: var(--surface);
 }
 .skip-link:focus {
   top: 1rem;
 }
 
-/* ---------- Prose (posts) ---------- */
+/* ---------- Prose (essays) ---------- */
 
 .prose > * + h2 {
   margin-top: 2.5em;
@@ -245,12 +356,18 @@ hr {
   margin-bottom: 0.5em;
 }
 
+/* The bordered pull quote: a wood rule on the left, light italic. */
 .prose blockquote {
-  margin: 2em 0;
-  padding-left: 1.25em;
-  border-left: 1px solid var(--wood);
+  margin: var(--space-6) 0;
+  padding-left: 40px;
+  border-left: var(--hairline) solid var(--wood);
+  font-size: var(--pull-quote);
+  line-height: 1.45;
+  font-weight: 300;
   font-style: italic;
-  color: var(--ink-soft);
+}
+.prose blockquote p:last-child {
+  margin-bottom: 0;
 }
 
 .prose ul,
@@ -262,51 +379,56 @@ hr {
   margin-top: 0.4em;
 }
 .prose li::marker {
-  color: var(--ink-soft);
+  color: var(--ink-muted);
 }
 
 .prose code {
-  font-family: var(--mono);
+  font-family: var(--font-mono);
   font-size: 0.8em;
 }
 
 .prose pre {
   font-size: 0.8rem;
   line-height: 1.6;
-  padding: 1.25rem;
+  padding: var(--space-3);
   overflow-x: auto;
-  border: 1px solid var(--rule);
-  background: var(--mat) !important;
+  border: var(--hairline) solid var(--rule);
+  background: var(--surface-raised) !important;
 }
 
-/* Images in posts are hung like framed prints. */
+/* Images in essays hang like framed prints. */
 .prose img,
 .print img {
   display: block;
   max-width: 100%;
   height: auto;
+  background: var(--surface-sunken);
 }
 
 .prose p > img,
-.print {
-  margin: 2.5em 0;
-  padding: clamp(0.75rem, 2.5vw, 1.5rem);
-  background: var(--mat);
-  border: 1px solid var(--frame);
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--frame) 35%, transparent);
+.print .frame {
+  padding: var(--frame-width);
+  background: var(--frame);
+  box-shadow: var(--shadow-print);
 }
 
-.print figcaption {
-  margin-top: 0.9rem;
+/* Smaller prints, including inline images in an essay, take a 12px frame. */
+.prose p > img,
+.print.small .frame {
+  padding: 12px;
+}
+
+.prose p > img {
+  margin: var(--space-6) 0;
 }
 
 /* ---------- Motion ---------- */
 
-/* Only hidden when JS is present to reveal it again. */
+/* Fog thinning. Only hidden when JS is present to reveal it again. */
 .js [data-reveal] {
   opacity: 0;
-  transform: translateY(0.5rem);
-  transition: opacity 1400ms ease, transform 1400ms ease;
+  transform: translateY(12px);
+  transition: opacity 1000ms ease-out, transform 1000ms ease-out;
 }
 .js [data-reveal].is-visible {
   opacity: 1;

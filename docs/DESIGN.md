@@ -1,26 +1,29 @@
-# Design Direction: "The Clearing"
+# Design: "The Clearing"
 
-The site should feel like a retreat from the internet: a quiet, warm room at the edge of a foggy forest where visitors slow down and stay a while. Serene, warm, grounded. Never loud, busy, or template-like.
+The site follows **The Clearing** design system: https://claude.ai/artifact/QLBwqhZAVgpjBfseE8QE8p. Its README and `tokens.json` are the source of truth. This file only records how the system maps onto this codebase.
 
-- **Modes:** Light = "fog" (warm cream bg, plum-brown ink). Dark = "forest office" (deep green bg, cream text, wood accents).
-- **Palette:** fog `#EEEAE3`, forest `#1E3530`, canopy text `#3F3538`, mist secondary `#8A7F7C`, wood accent `#C9A27A`. One accent only, no saturated colors.
-- **Layout:** generous whitespace; asymmetric compositions weighted bottom-left, open top-right; ~65ch reading width; thin wood-tone frames on images like framed prints.
-- **Type:** literary serif (Newsreader or Source Serif) for headings and body at 19–20px with 1.7 line-height; small quiet sans or mono for labels, dates, and nav.
-- **Texture/motion:** subtle paper/film grain; slow fade-ins on scroll only; respect `prefers-reduced-motion`.
-- **Presence:** no pop-ups, chat widgets, autoplay, or social feeds. Minimal nav (name, Home, What I'm Working On, Writing). Posts show reading time, have no sidebar, and end with an invitation to reply by email *(intentionally left off for now: the site doesn't mention or offer email)*.
-- **Microcopy tone:** a calm host. "Stay a while." "More from the desk."
-- **Avoid:** gradients, neon, dense card grids, stock photos, sales CTAs in the hero.
+In short, it's a retreat from the internet. **Serene. Warm. Grounded.** Fog (morning) is the light mode, Forest (evening) is the dark mode, there's one text accent, the type is literary serif, and the pages are mostly empty space.
 
-## How it's implemented
+## Where things live
 
-| Brief | Where |
+| System | Where |
 | --- | --- |
-| Palette and both modes | CSS variables at the top of `src/styles/global.css` |
-| Mode switch (fog / forest) | `src/components/ThemeToggle.astro`. Follows the system setting until the visitor picks one. |
-| Left-leaning column, 65ch | `.column` in `global.css` |
-| Framed prints | `src/components/Print.astro`, plus any `![]()` image in a post |
-| Grain | `body::before` in `global.css` (inline SVG noise, no image request) |
-| Slow fade-ins | add `data-reveal` to an element. Handled in `src/layouts/Base.astro`. Off under reduced motion. |
-| Reading time and post ending | `src/pages/writing/[...slug].astro` |
+| Tokens (color, type scale, spacing, layout, shadow) | CSS custom properties at the top of `src/styles/global.css`, one per token with the same name (`--surface`, `--ink`, `--accent`, …). Fog values are on `:root` and Forest values on `[data-theme='forest']`. |
+| ModeToggle (Morning / Evening) | `src/components/ThemeToggle.astro`, in the header. It follows the system setting until the visitor picks a mode, and fades over 0.9s. |
+| SiteHeader, diamond mark | `src/components/Header.astro`. Essay pages pass `essay` to get "← Back to writing" with the name centered. |
+| SectionHeading (numbered label + light heading) | `.section`, `.section-label` and `.hair` in `global.css`; used on Home |
+| EssayEntry | `src/components/PostList.astro`: `rows` on the Writing page, `stacked` on Home |
+| TextLink | `.text-link` in `global.css` |
+| FramedPrint | `src/components/Print.astro` (14px frame, or 12px with `small`), plus any `![]()` image in a post |
+| PullQuote (bordered variant) | `.prose blockquote` |
+| Essay ending (three diamonds) | `src/pages/writing/[...slug].astro` |
+| Paper grain | `body::before` (two layered dot patterns at 3–5% ink) |
+| Slow fade-ins | add `data-reveal` to an element; handled in `src/layouts/Base.astro`. Turned off under reduced motion. |
 
-**Accessibility note:** mist `#8A7F7C` is only 3.2:1 on fog, which is too faint for small text. It is used as given for rules and decorative lines. Small labels use a slightly deeper mist (`--ink-soft`: `#6E6360` on fog, `#A89E98` on forest) so they pass WCAG AA. Wood is never used for text on fog, where the contrast is 2:1.
+Posts can set an optional `topic` in their front matter. It shows in the writing list and the post's meta line.
+
+## Deliberate departures
+
+- **No reply-by-email note.** The system ends every essay with a ReplyNote inviting email. This site intentionally doesn't mention or offer email yet, so essays end with the three diamonds and "Thanks for staying a while" instead.
+- **Fonts are self-hosted** through Fontsource (Newsreader variable, IBM Plex Mono) rather than loaded from Google Fonts. The faces are the same.
+- **Responsive sizes.** Display sizes, the section gap and the gutter scale down on small screens with `clamp()`, reaching the system's exact values (112/76/60/38px, 200px, 96px) on desktop. Body text stays at 21px everywhere.

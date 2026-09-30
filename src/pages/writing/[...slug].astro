@@ -1,7 +1,7 @@
 ---
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { getPosts, formatDate, readingTime, type Post } from '../../lib/writing';
+import { getPosts, formatMonth, readingTime, type Post } from '../../lib/writing';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -21,53 +21,82 @@ const { Content } = await render(post);
 const minutes = readingTime(post.body);
 ---
 
-<Base title={post.data.title} description={post.data.description}>
+<Base title={post.data.title} description={post.data.description} essay>
   <article class="column post">
     <header>
-      <p class="label">
-        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+      <p class="meta">
+        <time datetime={post.data.date.toISOString()}>{formatMonth(post.data.date)}</time>
         <span aria-hidden="true"> · </span>
         {minutes} min read
+        {post.data.topic && <><span aria-hidden="true"> · </span><span class="topic">{post.data.topic}</span></>}
       </p>
       <h1>{post.data.title}</h1>
-      {post.data.description && <p class="lede soft">{post.data.description}</p>}
+      {post.data.description && <p class="lede">{post.data.description}</p>}
     </header>
 
     <div class="prose">
       <Content />
     </div>
 
-    <hr />
+    <div class="ends" aria-hidden="true">
+      <span class="mark"></span><span class="mark"></span><span class="mark"></span>
+    </div>
 
-    <nav class="after label" aria-label="More writing">
-      {older && <a href={`/writing/${older.id}/`}>Older: {older.data.title}</a>}
-      <a href="/writing/">More from the desk</a>
+    <nav class="after" aria-label="More writing">
+      <p class="label">Thanks for staying a while</p>
+      {
+        older && (
+          <p class="older">
+            <span class="meta">Older</span>
+            <a href={`/writing/${older.id}/`}>{older.data.title}</a>
+          </p>
+        )
+      }
+      <a class="text-link" href="/writing/">More from the desk →</a>
     </nav>
   </article>
 </Base>
 
 <style>
   .post header {
-    padding-block: clamp(3rem, 10vw, 7rem) clamp(2.5rem, 6vw, 4rem);
+    padding-block: clamp(4rem, 12vw, 9rem) var(--space-9);
   }
   .post h1 {
-    margin: 0.75rem 0 1rem;
+    margin: var(--space-2) 0 var(--space-3);
   }
   .post .lede {
     margin: 0;
   }
+  .topic {
+    color: var(--accent);
+  }
+
+  /* Three wood diamonds mark the end of an essay. */
+  .ends {
+    display: flex;
+    gap: 18px;
+    margin-top: var(--space-9);
+    padding-left: 4px;
+  }
+  .ends .mark {
+    width: 7px;
+    height: 7px;
+  }
 
   .after {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 1rem 2rem;
-    margin-top: 3rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
   }
-  .after a {
-    text-decoration: none;
+  .after p {
+    margin: 0;
   }
-  .after a:hover {
-    color: var(--ink);
+  .older {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: var(--body-sm);
   }
 </style>

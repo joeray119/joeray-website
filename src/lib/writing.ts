@@ -14,6 +14,8 @@ export function readingTime(body = ''): number {
   return Math.max(1, Math.round(words / 230));
 }
 
-export function formatDate(date: Date): string {
-  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+/** Short form for lists and meta lines: "Sept 2026". */
+export function formatMonth(date: Date): string {
+  const month = date.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' });
+  return `${month === 'Sep' ? 'Sept' : month} ${date.getUTCFullYear()}`;
 }

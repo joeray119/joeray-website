@@ -1,6 +1,7 @@
 ---
-// An image hung like a framed print: a thin wood frame around a soft mat.
-// Usage: <Print src={image} alt="…" caption="…" />
+// An image hung like a print: a square wood frame, the one shadow in the system,
+// and an optional caption below.
+// Usage: <Print src={image} alt="…" caption="…" />  (add `small` for a 12px frame)
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
@@ -10,24 +11,30 @@ interface Props {
   caption?: string;
   width?: number;
   height?: number;
+  small?: boolean;
 }
 
-const { src, alt, caption, width, height } = Astro.props;
+const { src, alt, caption, width, height, small = false } = Astro.props;
 ---
 
-<figure class="print" data-reveal>
-  {
-    typeof src === 'string' ? (
-      <img src={src} alt={alt} width={width} height={height} loading="lazy" decoding="async" />
-    ) : (
-      <Image src={src} alt={alt} width={width} height={height} />
-    )
-  }
-  {caption && <figcaption class="label">{caption}</figcaption>}
+<figure class:list={['print', { small }]} data-reveal>
+  <div class="frame">
+    {
+      typeof src === 'string' ? (
+        <img src={src} alt={alt} width={width} height={height} loading="lazy" decoding="async" />
+      ) : (
+        <Image src={src} alt={alt} width={width} height={height} />
+      )
+    }
+  </div>
+  {caption && <figcaption class="meta">{caption}</figcaption>}
 </figure>
 
 <style>
   figure {
-    margin-inline: 0;
+    margin: var(--space-6) 0;
+  }
+  figcaption {
+    margin-top: var(--space-2);
   }
 </style>

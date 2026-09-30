@@ -1,27 +1,63 @@
-<button class="theme-toggle label" type="button" aria-live="polite">
-  <span class="visually-hidden">Switch to </span><span data-next>forest</span>
+---
+// Morning (Fog) / Evening (Forest). Shows the mode you'd switch *to*.
+// Which label shows is pure CSS, so it's right before any script runs.
+---
+
+<button class="theme-toggle" type="button" aria-label="Switch to evening light">
+  <span class="to-evening">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+    Evening
+  </span>
+  <span class="to-morning">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+    Morning
+  </span>
 </button>
 
 <style>
   .theme-toggle {
     appearance: none;
-    background: none;
-    border: 0;
-    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 18px;
+    background: transparent;
+    border: var(--hairline) solid var(--rule);
+    border-radius: var(--radius-pill);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: var(--meta);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     cursor: pointer;
+    transition: opacity 400ms ease;
   }
   .theme-toggle:hover {
-    color: var(--ink);
+    opacity: 0.65;
   }
-  .theme-toggle [data-next]::before {
-    content: '';
-    display: inline-block;
-    width: 0.55em;
-    height: 0.55em;
-    margin-right: 0.6em;
-    border: 1px solid var(--wood);
-    border-radius: 50%;
-    vertical-align: 0.05em;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .to-morning {
+    display: none;
+  }
+  :global(:root[data-theme='forest']) .to-evening {
+    display: none;
+  }
+  :global(:root[data-theme='forest']) .to-morning {
+    display: inline-flex;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='fog'])) .to-evening {
+      display: none;
+    }
+    :global(:root:not([data-theme='fog'])) .to-morning {
+      display: inline-flex;
+    }
   }
 </style>
 
@@ -31,11 +67,8 @@
   const current = () => (root.dataset.theme ?? (dark.matches ? 'forest' : 'fog')) as 'fog' | 'forest';
 
   document.querySelectorAll<HTMLButtonElement>('.theme-toggle').forEach((button) => {
-    const label = button.querySelector('[data-next]')!;
     const render = () => {
-      const next = current() === 'fog' ? 'forest' : 'fog';
-      label.textContent = next;
-      button.title = `Switch to ${next} mode`;
+      button.setAttribute('aria-label', current() === 'fog' ? 'Switch to evening light' : 'Switch to morning light');
     };
     render();
     dark.addEventListener('change', render);

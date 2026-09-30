@@ -1,6 +1,6 @@
 # joeray-website
 
-A quiet personal site built with [Astro](https://astro.build). See [`docs/DESIGN.md`](docs/DESIGN.md) for the design direction ("The Clearing") and how it's implemented.
+A quiet personal site built with [Astro](https://astro.build). It follows the design system "The Clearing"; see [`docs/DESIGN.md`](docs/DESIGN.md) for how it maps onto the code.
 
 ## Working on it
 
@@ -26,6 +26,7 @@ Create `src/content/writing/my-post.md`:
 title: My post
 description: One quiet line about it.   # optional
 date: 2026-10-01
+topic: Craft                            # optional
 draft: true                             # optional; drafts only show in dev
 ---
 
